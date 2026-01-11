@@ -152,11 +152,6 @@ function createSession() {
     
     sessionWords.push(...otherWords.slice(0, remainingSlots));
     
-    // Reset session misses for all words
-    const allWords = getWords();
-    allWords.forEach(w => w.sessionMisses = 0);
-    saveWords(allWords);
-    
     currentSession = {
         words: sessionWords.slice(0, SESSION_SIZE),
         currentIndex: 0,
@@ -165,6 +160,16 @@ function createSession() {
         streak: 0,
         points: 0
     };
+    
+    // Reset session misses only for words in this session
+    const allWords = getWords();
+    currentSession.words.forEach(sessionWord => {
+        const wordIndex = allWords.findIndex(w => w.text === sessionWord.text);
+        if (wordIndex !== -1) {
+            allWords[wordIndex].sessionMisses = 0;
+        }
+    });
+    saveWords(allWords);
     
     return currentSession;
 }
@@ -222,6 +227,26 @@ function completeSession() {
     stats.totalWordsMissed += currentSession.missedCount;
     stats.totalPoints += currentSession.points;
     saveStats(stats);
+}
+
+// ============================================
+// Toast Notification System
+// ============================================
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Trigger animation
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
 // ============================================
@@ -501,13 +526,13 @@ document.getElementById('add-word-btn').addEventListener('click', () => {
     const wordText = input.value.trim().toLowerCase();
     
     if (!wordText) {
-        alert('Please enter a word');
+        showToast('Please enter a word', 'error');
         return;
     }
     
     const words = getWords();
     if (words.some(w => w.text === wordText)) {
-        alert('This word already exists');
+        showToast('This word already exists', 'error');
         return;
     }
     
@@ -527,7 +552,7 @@ document.getElementById('add-word-btn').addEventListener('click', () => {
     updateDashboardStats();
     updateAllWordsDisplay();
     
-    alert('Word added successfully!');
+    showToast(`Word "${wordText}" added successfully!`, 'success');
 });
 
 // Word filter buttons

@@ -466,3 +466,41 @@ body {
 * {
     -webkit-tap-highlight-color: transparent;
 }
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    color: #333;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    font-weight: bold;
+    transition: bottom 0.3s ease;
+    z-index: 10000;
+    min-width: 250px;
+    text-align: center;
+}
+
+.toast.show {
+    bottom: 30px;
+}
+
+.toast.toast-success {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.toast.toast-error {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+}
+
+.toast.toast-info {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+}
