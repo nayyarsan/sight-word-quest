@@ -140,10 +140,6 @@ The app includes 190+ high-frequency sight words compiled from trusted sources (
 
 You can add unlimited custom words through the Parent Dashboard, and they will be available for practice alongside the default words.
 
-## Previous Organization
-
-You can add unlimited custom words through the Parent Dashboard.
-
 ## Browser Compatibility
 
 Works in all modern browsers that support:

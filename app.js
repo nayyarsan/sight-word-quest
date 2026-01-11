@@ -112,13 +112,13 @@ const CHAPTERS = [
         id: 18,
         name: "Time & Frequency",
         description: "Words about when things happen",
-        words: ['always', 'never', 'once', 'time', 'day', 'now', 'then', 'soon', 'before', 'after']
+        words: ['always', 'never', 'once', 'time', 'day']
     },
     {
         id: 19,
         name: "Ways & Means",
         description: "Words about how we do things",
-        words: ['use', 'way', 'work', 'live', 'best', 'well', 'very', 'much', 'just', 'only']
+        words: ['use', 'way', 'work', 'live', 'best']
     }
 ];
 
