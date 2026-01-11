@@ -782,12 +782,49 @@ function displayCurrentWord() {
     const progressPercent = ((currentIndex) / words.length) * 100;
     document.getElementById('progress-fill').style.width = `${progressPercent}%`;
     
+    // Disable interaction buttons until word is spoken
+    disableInteractionButtons();
+    
     // Start countdown timer and auto-speak word after 5 seconds
     startCountdown(5, () => {
         if (currentSession.currentIndex === currentIndex) {
             speakWord(word.text);
+            // Enable interaction buttons after word is spoken
+            enableInteractionButtons();
         }
     });
+}
+
+function disableInteractionButtons() {
+    const speakBtn = document.getElementById('speak-word-btn');
+    const gotItBtn = document.getElementById('got-it-btn');
+    
+    if (speakBtn) {
+        speakBtn.disabled = true;
+        speakBtn.style.opacity = '0.5';
+        speakBtn.style.cursor = 'not-allowed';
+    }
+    if (gotItBtn) {
+        gotItBtn.disabled = true;
+        gotItBtn.style.opacity = '0.5';
+        gotItBtn.style.cursor = 'not-allowed';
+    }
+}
+
+function enableInteractionButtons() {
+    const speakBtn = document.getElementById('speak-word-btn');
+    const gotItBtn = document.getElementById('got-it-btn');
+    
+    if (speakBtn) {
+        speakBtn.disabled = false;
+        speakBtn.style.opacity = '1';
+        speakBtn.style.cursor = 'pointer';
+    }
+    if (gotItBtn) {
+        gotItBtn.disabled = false;
+        gotItBtn.style.opacity = '1';
+        gotItBtn.style.cursor = 'pointer';
+    }
 }
 
 function showFeedback(correct) {
@@ -817,6 +854,8 @@ document.getElementById('need-help-btn').addEventListener('click', () => {
     clearCountdown();
     const word = currentSession.words[currentSession.currentIndex];
     speakWord(word.text);
+    // Enable interaction buttons after speaking
+    enableInteractionButtons();
     handleWordResponse(false);
     showFeedback(false);
     setTimeout(proceedToNextWord, 1500);
@@ -825,6 +864,8 @@ document.getElementById('need-help-btn').addEventListener('click', () => {
 document.getElementById('hear-word-btn').addEventListener('click', () => {
     const word = currentSession.words[currentSession.currentIndex];
     speakWord(word.text);
+    // Enable interaction buttons after manually playing the word
+    enableInteractionButtons();
 });
 
 document.getElementById('speak-word-btn').addEventListener('click', () => {
