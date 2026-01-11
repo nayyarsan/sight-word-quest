@@ -4,11 +4,47 @@
 // Data Management & Storage
 // ============================================
 
-// Default word list (common sight words for early readers)
+// Default word list (100+ common sight words for early readers)
+// Compiled from Dolch, Fry, and Oxford high-frequency word lists
 const DEFAULT_WORDS = [
+    // Most common words (Dolch Pre-Primer & Primer)
     'the', 'and', 'a', 'to', 'said', 'in', 'he', 'I', 'of', 'it',
     'was', 'you', 'they', 'on', 'she', 'is', 'for', 'at', 'his', 'but',
-    'that', 'with', 'all', 'we', 'can', 'are', 'up', 'had', 'my', 'her'
+    'that', 'with', 'all', 'we', 'can', 'are', 'up', 'had', 'my', 'her',
+    
+    // Common verbs and actions
+    'see', 'look', 'go', 'come', 'get', 'make', 'do', 'run', 'jump', 'play',
+    'help', 'walk', 'stop', 'find', 'put', 'take', 'give', 'think', 'say', 'know',
+    
+    // Question words and basic connectors
+    'who', 'what', 'where', 'when', 'why', 'how', 'which', 'an', 'as', 'be',
+    'by', 'or', 'if', 'so', 'no', 'yes', 'not', 'then', 'than', 'now',
+    
+    // Prepositions and directional words
+    'from', 'into', 'over', 'under', 'out', 'down', 'around', 'off', 'up', 'about',
+    'there', 'here', 'away', 'back', 'again', 'soon', 'right', 'left', 'before', 'after',
+    
+    // Pronouns and possessives
+    'him', 'them', 'this', 'these', 'those', 'some', 'any', 'many', 'our', 'your',
+    'their', 'us', 'me',
+    
+    // Size and quantity descriptors
+    'big', 'little', 'small', 'long', 'short', 'old', 'new', 'good', 'bad', 'very',
+    'much', 'more', 'most', 'few', 'lots', 'only', 'just', 'other', 'every', 'each',
+    
+    // Numbers (1-10)
+    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+    
+    // Common modals and auxiliaries
+    'has', 'have', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'must',
+    'been', 'being',
+    
+    // Conjunctions and connectors
+    'because', 'also', 'too', 'both', 'either', 'neither', 'while', 'until', 'since',
+    
+    // Additional high-frequency words
+    'want', 'well', 'went', 'like', 'let', 'live', 'made', 'work', 'call', 'came',
+    'ask', 'use', 'its', 'way', 'day', 'time', 'always', 'never', 'once', 'best'
 ];
 
 // Word states

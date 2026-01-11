@@ -95,12 +95,25 @@ vercel
 
 ## Default Word List
 
-The app includes 30 common sight words:
-```
-the, and, a, to, said, in, he, I, of, it,
-was, you, they, on, she, is, for, at, his, but,
-that, with, all, we, can, are, up, had, my, her
-```
+The app includes 170+ high-frequency sight words compiled from trusted sources (Dolch, Fry, and Oxford word lists), organized by category:
+
+**Most Common Words:** the, and, a, to, said, in, he, I, of, it, was, you, they, on, she, is, for, at, his, but, that, with, all, we, can, are, up, had, my, her
+
+**Common Verbs & Actions:** see, look, go, come, get, make, do, run, jump, play, help, walk, stop, find, put, take, give, think, say, know
+
+**Question Words & Connectors:** who, what, where, when, why, how, which, an, as, be, by, or, if, so, no, yes, not, then, than, now
+
+**Prepositions & Directional Words:** from, into, over, under, out, down, around, off, up, about, there, here, away, back, again, soon, right, left, before, after
+
+**Pronouns & Possessives:** him, them, this, these, those, some, any, many, our, your, their, us, me
+
+**Size & Quantity Descriptors:** big, little, small, long, short, old, new, good, bad, very, much, more, most, few, lots, only, just, other, every, each
+
+**Numbers:** one through ten
+
+**Modals & Auxiliaries:** has, have, does, did, will, would, could, should, may, must, been, being
+
+**And many more...**
 
 You can add unlimited custom words through the Parent Dashboard.
 
