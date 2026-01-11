@@ -6,7 +6,9 @@ A Progressive Web App (PWA) to help children learn sight words through gamified 
 
 ### For Children 👧👦
 - **Large, readable word display** - Easy to read for young learners
-- **Audio support** - Automatic word pronunciation after 5 seconds
+- **Countdown timer** - Visual 5-second countdown before words are spoken
+- **Audio support** - Automatic word pronunciation after countdown
+- **Speech recognition** - Say the word aloud and get instant validation (Chrome/Edge)
 - **Simple controls** - "I got it right" and "I need help" buttons
 - **Instant feedback** - Visual checkmarks and animations
 - **Gamification** - Points, streaks, and encouraging end-of-session summaries
@@ -15,7 +17,7 @@ A Progressive Web App (PWA) to help children learn sight words through gamified 
 ### For Parents 👪
 - **Progress tracking** - See total words mastered and sessions completed
 - **Challenge Deck** - Automatically identifies words that need more practice
-- **Word management** - Add custom words (names, school lists, etc.)
+- **Word management** - Add custom words (names, school lists, etc.) with Enter key
 - **Word filtering** - View words by status (new, learning, mastered)
 - **Enable/disable words** - Customize which words appear in sessions
 
@@ -106,8 +108,16 @@ You can add unlimited custom words through the Parent Dashboard.
 
 Works in all modern browsers that support:
 - localStorage
-- Web Speech API (for text-to-speech)
+- Web Speech API (for text-to-speech and speech recognition)
 - Service Workers (for PWA features)
+
+**Speech Recognition Feature:**
+- ✅ **Chrome/Edge 90+**: Full support for speech recognition
+- ✅ **Chrome Mobile**: Full support for speech recognition
+- ⚠️ **Firefox 88+**: Limited or no speech recognition support
+- ⚠️ **Safari 14+**: Limited or no speech recognition support
+- ℹ️ The speech recognition button will automatically hide if not supported
+- ℹ️ Fallback buttons ("I got it right" / "I need help") are always available
 
 Tested on:
 - Chrome/Edge 90+
