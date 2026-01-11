@@ -40,7 +40,7 @@ const CHAPTERS = [
         id: 6,
         name: "Direction & Place",
         description: "Words about where things are",
-        words: ['here', 'there', 'out', 'down', 'up', 'into', 'over', 'under', 'from', 'about']
+        words: ['here', 'there', 'out', 'down', 'into', 'over', 'under', 'from', 'about']
     },
     {
         id: 7,
@@ -88,7 +88,7 @@ const CHAPTERS = [
         id: 14,
         name: "Belonging",
         description: "Words about possession and ownership",
-        words: ['our', 'your', 'their', 'my', 'his', 'her', 'me', 'us', 'them', 'its']
+        words: ['our', 'your', 'their', 'its']
     },
     {
         id: 15,

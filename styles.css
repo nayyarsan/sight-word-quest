@@ -501,6 +501,11 @@ body {
     font-size: 14px;
 }
 
+.chapter-toggle-btn:focus {
+    outline: 3px solid #FFD700;
+    outline-offset: 2px;
+}
+
 .chapter-description {
     color: #666;
     font-size: 14px;
