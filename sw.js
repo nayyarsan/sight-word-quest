@@ -19,7 +19,7 @@ self.addEventListener('install', (event) => {
         return cache.addAll(urlsToCache);
       })
       .catch((error) => {
-        console.log('Cache installation failed:', error);
+        console.error('Cache installation failed:', error);
       })
   );
 });
@@ -51,6 +51,9 @@ self.addEventListener('fetch', (event) => {
               cache.put(event.request, responseToCache).catch((error) => {
                 console.error('Failed to cache:', error);
               });
+            })
+            .catch((error) => {
+              console.error('Failed to open cache:', error);
             });
           
           return response;
