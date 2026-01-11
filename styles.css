@@ -445,6 +445,135 @@ body {
     color: white;
 }
 
+.filter-btn.active {
+    background: #667eea;
+    color: white;
+}
+
+/* Chapters Section */
+.chapters-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.chapter-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.chapter-card.locked {
+    opacity: 0.6;
+    background: #f5f5f5;
+}
+
+.chapter-card.unlocked {
+    border-left: 4px solid #4CAF50;
+}
+
+.chapter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.chapter-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chapter-lock-icon {
+    font-size: 24px;
+}
+
+.chapter-toggle-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.chapter-toggle-btn:focus {
+    outline: 3px solid #FFD700;
+    outline-offset: 2px;
+}
+
+.chapter-description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.chapter-progress {
+    margin-bottom: 15px;
+}
+
+.chapter-progress-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.chapter-progress-bar {
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.chapter-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    transition: width 0.3s ease;
+}
+
+.chapter-stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.stat-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.stat-badge.stat-new {
+    background: #E3F2FD;
+    color: #1976D2;
+}
+
+.stat-badge.stat-learning {
+    background: #FFF3E0;
+    color: #F57C00;
+}
+
+.stat-badge.stat-mastered {
+    background: #E8F5E9;
+    color: #388E3C;
+}
+
+.chapter-recommendation {
+    margin-top: 15px;
+    padding: 12px;
+    background: #FFF9C4;
+    border-left: 4px solid #FBC02D;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .app-title {
