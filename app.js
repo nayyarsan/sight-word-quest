@@ -151,7 +151,8 @@ const STORAGE_KEYS = {
     WORDS: 'sightWords',
     STATS: 'appStats',
     CHALLENGE_DECK: 'challengeDeck',
-    CHAPTERS: 'chapterStates'
+    CHAPTERS: 'chapterStates',
+    STREAK: 'dailyStreak'
 };
 
 // Initialize app data structure
@@ -192,6 +193,16 @@ function initializeAppData() {
             totalWordsMissed: 0
         };
         localStorage.setItem(STORAGE_KEYS.STATS, JSON.stringify(initialStats));
+    }
+
+    // Initialize streak data if not exists
+    if (!localStorage.getItem(STORAGE_KEYS.STREAK)) {
+        const initialStreak = {
+            currentStreak: 0,
+            longestStreak: 0,
+            lastSessionDate: null
+        };
+        localStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(initialStreak));
     }
 
     // Initialize challenge deck if not exists
@@ -252,6 +263,74 @@ function getChapterStates() {
 function saveChapterStates(states) {
     localStorage.setItem(STORAGE_KEYS.CHAPTERS, JSON.stringify(states));
 }
+
+// Get streak data
+function getStreakData() {
+    const streak = localStorage.getItem(STORAGE_KEYS.STREAK);
+    return streak ? JSON.parse(streak) : { currentStreak: 0, longestStreak: 0, lastSessionDate: null };
+}
+
+// Save streak data
+function saveStreakData(streakData) {
+    localStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(streakData));
+}
+
+// Check if date is today (in local timezone)
+function isToday(dateString) {
+    if (!dateString) return false;
+    const date = new Date(dateString);
+    const today = new Date();
+    return date.toDateString() === today.toDateString();
+}
+
+// Check if date is yesterday (in local timezone)
+function isYesterday(dateString) {
+    if (!dateString) return false;
+    const date = new Date(dateString);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return date.toDateString() === yesterday.toDateString();
+}
+
+// Update streak based on last session date
+function updateStreak() {
+    const streakData = getStreakData();
+    const lastDate = streakData.lastSessionDate;
+    
+    // If already practiced today, return current streak (no update)
+    if (isToday(lastDate)) {
+        return streakData;
+    }
+    
+    // If practiced yesterday, increment streak
+    if (isYesterday(lastDate)) {
+        streakData.currentStreak++;
+    } else {
+        // If more than a day has passed, reset streak to 1 (today)
+        streakData.currentStreak = 1;
+    }
+    
+    // Update longest streak if current is higher
+    if (streakData.currentStreak > streakData.longestStreak) {
+        streakData.longestStreak = streakData.currentStreak;
+    }
+    
+    // Update last session date to today
+    streakData.lastSessionDate = new Date().toISOString();
+    
+    // Save and return updated streak data
+    saveStreakData(streakData);
+    return streakData;
+}
+
+// Calculate bonus points based on streak
+function calculateStreakBonus(streak) {
+    if (streak <= 0) return 0;
+    // Bonus increases with streak: 5 points for day 1, +2 for each additional day
+    // Formula: 5 + (streak - 1) * 2
+    return 5 + (streak - 1) * 2;
+}
+
 
 // Get unlocked chapters
 function getUnlockedChapters() {
@@ -336,7 +415,9 @@ let currentSession = {
     correctCount: 0,
     missedCount: 0,
     streak: 0,
-    points: 0
+    points: 0,
+    dailyStreak: 0,
+    streakBonus: 0
 };
 
 const SESSION_SIZE = 10;
@@ -345,6 +426,10 @@ const CHALLENGE_THRESHOLD = 2; // Misses needed to add to challenge deck
 
 // Create a new session
 function createSession() {
+    // Update daily streak at the start of session
+    const streakData = updateStreak();
+    const streakBonus = calculateStreakBonus(streakData.currentStreak);
+    
     const allWords = getWords();
     const unlockedChapterIds = getUnlockedChapters();
     
@@ -385,8 +470,13 @@ function createSession() {
         correctCount: 0,
         missedCount: 0,
         streak: 0,
-        points: 0
+        points: 0,
+        dailyStreak: streakData.currentStreak,
+        streakBonus: streakBonus
     };
+    
+    // Show streak milestone celebration if applicable
+    celebrateStreakMilestone(streakData.currentStreak);
     
     // Reset session misses only for words in this session
     const allWordsForUpdate = getWords();
@@ -452,11 +542,30 @@ function completeSession() {
     stats.totalSessions++;
     stats.totalWordsCorrect += currentSession.correctCount;
     stats.totalWordsMissed += currentSession.missedCount;
-    stats.totalPoints += currentSession.points;
+    // Add session points AND streak bonus to total
+    stats.totalPoints += currentSession.points + currentSession.streakBonus;
     saveStats(stats);
     
     // Check if any new chapters should be unlocked
     checkAndUnlockNextChapter();
+}
+
+// Celebrate streak milestones
+function celebrateStreakMilestone(streak) {
+    if (streak === 1) {
+        showToast('🎉 Welcome back! Your streak starts today!', 'success');
+    } else if (streak === 5) {
+        showToast('🔥 Amazing! 5-day streak! Keep it up!', 'success');
+    } else if (streak === 10) {
+        showToast('⭐ Incredible! 10-day streak! You\'re on fire!', 'success');
+    } else if (streak === 30) {
+        showToast('🏆 Legendary! 30-day streak! You\'re a champion!', 'success');
+    } else if (streak > 1 && streak % 7 === 0) {
+        // Celebrate every week after first milestone
+        showToast(`🌟 ${streak}-day streak! You\'re doing great!`, 'success');
+    } else if (streak > 1) {
+        showToast(`🔥 ${streak}-day streak! Keep practicing!`, 'success');
+    }
 }
 
 // ============================================
@@ -777,7 +886,7 @@ function displayCurrentWord() {
     
     // Update progress
     document.getElementById('word-counter').textContent = `Word ${currentIndex + 1} of ${words.length}`;
-    document.getElementById('streak-counter').textContent = `🔥 Streak: ${currentSession.streak}`;
+    document.getElementById('streak-counter').textContent = `🔥 Daily Streak: ${currentSession.dailyStreak} days`;
     
     const progressPercent = ((currentIndex) / words.length) * 100;
     document.getElementById('progress-fill').style.width = `${progressPercent}%`;
@@ -883,7 +992,15 @@ function showSummaryScreen() {
     document.getElementById('words-attempted').textContent = currentSession.words.length;
     document.getElementById('words-correct').textContent = currentSession.correctCount;
     document.getElementById('words-missed').textContent = currentSession.missedCount;
-    document.getElementById('points-earned').textContent = currentSession.points;
+    // Show total points including streak bonus
+    const totalPoints = currentSession.points + currentSession.streakBonus;
+    document.getElementById('points-earned').textContent = totalPoints;
+    document.getElementById('daily-streak-display').textContent = currentSession.dailyStreak;
+    
+    // Show bonus points info if there's a streak bonus
+    if (currentSession.streakBonus > 0) {
+        showToast(`🎉 +${currentSession.streakBonus} bonus points for ${currentSession.dailyStreak}-day streak!`, 'success');
+    }
 }
 
 document.getElementById('finish-session-btn').addEventListener('click', () => {
@@ -906,12 +1023,15 @@ function updateDashboardStats() {
     const words = getWords();
     const stats = getStats();
     const challengeDeck = getChallengeDeck();
+    const streakData = getStreakData();
     
     const masteredCount = words.filter(w => w.state === WORD_STATES.MASTERED).length;
     
     document.getElementById('total-mastered').textContent = masteredCount;
     document.getElementById('total-sessions').textContent = stats.totalSessions;
     document.getElementById('challenge-deck-count').textContent = challengeDeck.length;
+    document.getElementById('current-streak').textContent = streakData.currentStreak;
+    document.getElementById('longest-streak').textContent = streakData.longestStreak;
 }
 
 function updateChaptersDisplay() {

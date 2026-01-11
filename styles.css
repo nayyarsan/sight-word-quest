@@ -271,6 +271,18 @@ body {
     animation: slideUp 0.5s ease;
 }
 
+.stat-card.streak-card {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+}
+
+.stat-card.streak-card .stat-value {
+    color: white;
+}
+
+.stat-card.streak-card .stat-label {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 @keyframes slideUp {
     from { transform: translateY(30px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
