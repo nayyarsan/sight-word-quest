@@ -4,48 +4,139 @@
 // Data Management & Storage
 // ============================================
 
-// Default word list (100+ common sight words for early readers)
-// Compiled from Dolch, Fry, and Oxford high-frequency word lists
-const DEFAULT_WORDS = [
-    // Most common words (Dolch Pre-Primer & Primer)
-    'the', 'and', 'a', 'to', 'said', 'in', 'he', 'I', 'of', 'it',
-    'was', 'you', 'they', 'on', 'she', 'is', 'for', 'at', 'his', 'but',
-    'that', 'with', 'all', 'we', 'can', 'are', 'up', 'had', 'my', 'her',
-    
-    // Common verbs and actions
-    'see', 'look', 'go', 'come', 'get', 'make', 'do', 'run', 'jump', 'play',
-    'help', 'walk', 'stop', 'find', 'put', 'take', 'give', 'think', 'say', 'know',
-    
-    // Question words and basic connectors
-    'who', 'what', 'where', 'when', 'why', 'how', 'which', 'an', 'as', 'be',
-    'by', 'or', 'if', 'so', 'no', 'yes', 'not', 'then', 'than', 'now',
-    
-    // Prepositions and directional words
-    'from', 'into', 'over', 'under', 'out', 'down', 'around', 'off', 'up', 'about',
-    'there', 'here', 'away', 'back', 'again', 'soon', 'right', 'left', 'before', 'after',
-    
-    // Pronouns and possessives
-    'him', 'them', 'this', 'these', 'those', 'some', 'any', 'many', 'our', 'your',
-    'their', 'us', 'me',
-    
-    // Size and quantity descriptors
-    'big', 'little', 'small', 'long', 'short', 'old', 'new', 'good', 'bad', 'very',
-    'much', 'more', 'most', 'few', 'lots', 'only', 'just', 'other', 'every', 'each',
-    
-    // Numbers (1-10)
-    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
-    
-    // Common modals and auxiliaries
-    'has', 'have', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'must',
-    'been', 'being',
-    
-    // Conjunctions and connectors
-    'because', 'also', 'too', 'both', 'either', 'neither', 'while', 'until', 'since',
-    
-    // Additional high-frequency words
-    'want', 'well', 'went', 'like', 'let', 'live', 'made', 'work', 'call', 'came',
-    'ask', 'use', 'its', 'way', 'day', 'time', 'always', 'never', 'once', 'best'
+// Chapter definitions - organizing sight words into progressive learning chapters
+const CHAPTERS = [
+    {
+        id: 1,
+        name: "Starting Out",
+        description: "The most common and essential sight words",
+        words: ['the', 'and', 'a', 'to', 'in', 'I', 'is', 'it', 'you', 'of']
+    },
+    {
+        id: 2,
+        name: "Simple Actions",
+        description: "Basic action words we use every day",
+        words: ['go', 'see', 'can', 'we', 'my', 'he', 'she', 'me', 'up', 'at']
+    },
+    {
+        id: 3,
+        name: "More Basics",
+        description: "Building on what you know",
+        words: ['was', 'on', 'they', 'but', 'had', 'all', 'are', 'for', 'his', 'her']
+    },
+    {
+        id: 4,
+        name: "Common Verbs",
+        description: "Action words for everyday activities",
+        words: ['look', 'come', 'get', 'said', 'with', 'do', 'make', 'run', 'play', 'help']
+    },
+    {
+        id: 5,
+        name: "Question Words",
+        description: "Words that help us ask questions",
+        words: ['what', 'who', 'where', 'when', 'why', 'how', 'which', 'an', 'as', 'be']
+    },
+    {
+        id: 6,
+        name: "Direction & Place",
+        description: "Words about where things are",
+        words: ['here', 'there', 'out', 'down', 'up', 'into', 'over', 'under', 'from', 'about']
+    },
+    {
+        id: 7,
+        name: "More Actions",
+        description: "Learning more things we can do",
+        words: ['jump', 'walk', 'stop', 'find', 'put', 'take', 'give', 'think', 'say', 'know']
+    },
+    {
+        id: 8,
+        name: "People & Things",
+        description: "Words about us and our world",
+        words: ['him', 'them', 'us', 'this', 'that', 'these', 'those', 'some', 'any', 'many']
+    },
+    {
+        id: 9,
+        name: "Describing Words",
+        description: "Words that tell us about size and quality",
+        words: ['big', 'little', 'good', 'bad', 'old', 'new', 'long', 'short', 'small', 'very']
+    },
+    {
+        id: 10,
+        name: "Numbers",
+        description: "Counting words from one to ten",
+        words: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+    },
+    {
+        id: 11,
+        name: "Connecting Ideas",
+        description: "Words that join thoughts together",
+        words: ['or', 'if', 'so', 'not', 'yes', 'no', 'by', 'then', 'than', 'now']
+    },
+    {
+        id: 12,
+        name: "More Describing",
+        description: "Even more ways to describe things",
+        words: ['much', 'more', 'most', 'few', 'lots', 'only', 'just', 'other', 'every', 'each']
+    },
+    {
+        id: 13,
+        name: "Around & About",
+        description: "More directional and location words",
+        words: ['around', 'off', 'away', 'back', 'again', 'soon', 'right', 'left', 'before', 'after']
+    },
+    {
+        id: 14,
+        name: "Belonging",
+        description: "Words about possession and ownership",
+        words: ['our', 'your', 'their', 'my', 'his', 'her', 'me', 'us', 'them', 'its']
+    },
+    {
+        id: 15,
+        name: "Helping Verbs",
+        description: "Words that help other verbs",
+        words: ['has', 'have', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'must']
+    },
+    {
+        id: 16,
+        name: "Being & Doing",
+        description: "More forms of verbs",
+        words: ['been', 'being', 'want', 'like', 'let', 'went', 'made', 'came', 'call', 'ask']
+    },
+    {
+        id: 17,
+        name: "Advanced Connectors",
+        description: "Complex connecting words",
+        words: ['because', 'also', 'too', 'both', 'either', 'neither', 'while', 'until', 'since', 'well']
+    },
+    {
+        id: 18,
+        name: "Time & Frequency",
+        description: "Words about when things happen",
+        words: ['always', 'never', 'once', 'time', 'day', 'now', 'then', 'soon', 'before', 'after']
+    },
+    {
+        id: 19,
+        name: "Ways & Means",
+        description: "Words about how we do things",
+        words: ['use', 'way', 'work', 'live', 'best', 'well', 'very', 'much', 'just', 'only']
+    }
 ];
+
+// Build flat word list with chapter assignments for backward compatibility
+const DEFAULT_WORDS = [];
+CHAPTERS.forEach(chapter => {
+    DEFAULT_WORDS.push(...chapter.words);
+});
+
+// Helper function to get chapter ID for a word
+function getWordChapterId(wordText) {
+    for (const chapter of CHAPTERS) {
+        if (chapter.words.includes(wordText)) {
+            return chapter.id;
+        }
+    }
+    return null; // For custom words added by users
+}
 
 // Word states
 const WORD_STATES = {
@@ -59,7 +150,8 @@ const WORD_STATES = {
 const STORAGE_KEYS = {
     WORDS: 'sightWords',
     STATS: 'appStats',
-    CHALLENGE_DECK: 'challengeDeck'
+    CHALLENGE_DECK: 'challengeDeck',
+    CHAPTERS: 'chapterStates'
 };
 
 // Initialize app data structure
@@ -72,9 +164,23 @@ function initializeAppData() {
             correctCount: 0,
             missedCount: 0,
             lastPracticed: null,
-            sessionMisses: 0
+            sessionMisses: 0,
+            chapterId: getWordChapterId(word)
         }));
         localStorage.setItem(STORAGE_KEYS.WORDS, JSON.stringify(initialWords));
+    } else {
+        // Migration: Add chapterId to existing words if not present
+        const words = getWords();
+        let needsUpdate = false;
+        words.forEach(word => {
+            if (word.chapterId === undefined) {
+                word.chapterId = getWordChapterId(word.text);
+                needsUpdate = true;
+            }
+        });
+        if (needsUpdate) {
+            saveWords(words);
+        }
     }
 
     // Initialize stats if not exists
@@ -91,6 +197,15 @@ function initializeAppData() {
     // Initialize challenge deck if not exists
     if (!localStorage.getItem(STORAGE_KEYS.CHALLENGE_DECK)) {
         localStorage.setItem(STORAGE_KEYS.CHALLENGE_DECK, JSON.stringify([]));
+    }
+
+    // Initialize chapter states if not exists
+    if (!localStorage.getItem(STORAGE_KEYS.CHAPTERS)) {
+        const initialChapterStates = CHAPTERS.map(chapter => ({
+            id: chapter.id,
+            unlocked: chapter.id === 1 // Only first chapter unlocked by default
+        }));
+        localStorage.setItem(STORAGE_KEYS.CHAPTERS, JSON.stringify(initialChapterStates));
     }
 }
 
@@ -125,6 +240,74 @@ function getChallengeDeck() {
 // Save challenge deck
 function saveChallengeDeck(deck) {
     localStorage.setItem(STORAGE_KEYS.CHALLENGE_DECK, JSON.stringify(deck));
+}
+
+// Get chapter states
+function getChapterStates() {
+    const states = localStorage.getItem(STORAGE_KEYS.CHAPTERS);
+    return states ? JSON.parse(states) : [];
+}
+
+// Save chapter states
+function saveChapterStates(states) {
+    localStorage.setItem(STORAGE_KEYS.CHAPTERS, JSON.stringify(states));
+}
+
+// Get unlocked chapters
+function getUnlockedChapters() {
+    const chapterStates = getChapterStates();
+    return chapterStates.filter(c => c.unlocked).map(c => c.id);
+}
+
+// Toggle chapter lock/unlock
+function toggleChapterLock(chapterId) {
+    const chapterStates = getChapterStates();
+    const chapterState = chapterStates.find(c => c.id === chapterId);
+    if (chapterState) {
+        chapterState.unlocked = !chapterState.unlocked;
+        saveChapterStates(chapterStates);
+    }
+}
+
+// Get chapter progress
+function getChapterProgress(chapterId) {
+    const words = getWords();
+    const chapter = CHAPTERS.find(c => c.id === chapterId);
+    if (!chapter) return { total: 0, mastered: 0, learning: 0, new: 0 };
+    
+    const chapterWords = words.filter(w => w.chapterId === chapterId);
+    const mastered = chapterWords.filter(w => w.state === WORD_STATES.MASTERED).length;
+    const learning = chapterWords.filter(w => w.state === WORD_STATES.LEARNING).length;
+    const newWords = chapterWords.filter(w => w.state === WORD_STATES.NEW).length;
+    
+    return {
+        total: chapterWords.length,
+        mastered: mastered,
+        learning: learning,
+        new: newWords
+    };
+}
+
+// Check if next chapter should be unlocked
+function checkAndUnlockNextChapter() {
+    const chapterStates = getChapterStates();
+    
+    for (let i = 0; i < CHAPTERS.length - 1; i++) {
+        const currentChapter = CHAPTERS[i];
+        const currentState = chapterStates.find(c => c.id === currentChapter.id);
+        const nextState = chapterStates.find(c => c.id === currentChapter.id + 1);
+        
+        // If current chapter is unlocked and next is locked
+        if (currentState && currentState.unlocked && nextState && !nextState.unlocked) {
+            const progress = getChapterProgress(currentChapter.id);
+            // Unlock next chapter if 80% of current chapter is mastered
+            if (progress.total > 0 && (progress.mastered / progress.total) >= 0.8) {
+                nextState.unlocked = true;
+                saveChapterStates(chapterStates);
+                showToast(`🎉 Chapter ${nextState.id} "${CHAPTERS[i + 1].name}" unlocked!`, 'success');
+            }
+        }
+    }
 }
 
 // Add word to challenge deck
@@ -162,7 +345,15 @@ const CHALLENGE_THRESHOLD = 2; // Misses needed to add to challenge deck
 
 // Create a new session
 function createSession() {
-    const words = getWords().filter(w => w.state !== WORD_STATES.DISABLED);
+    const allWords = getWords();
+    const unlockedChapterIds = getUnlockedChapters();
+    
+    // Filter words: enabled words from unlocked chapters only
+    const words = allWords.filter(w => 
+        w.state !== WORD_STATES.DISABLED && 
+        (w.chapterId === null || unlockedChapterIds.includes(w.chapterId))
+    );
+    
     const challengeDeck = getChallengeDeck();
     
     let sessionWords = [];
@@ -198,14 +389,14 @@ function createSession() {
     };
     
     // Reset session misses only for words in this session
-    const allWords = getWords();
+    const allWordsForUpdate = getWords();
     currentSession.words.forEach(sessionWord => {
-        const wordIndex = allWords.findIndex(w => w.text === sessionWord.text);
+        const wordIndex = allWordsForUpdate.findIndex(w => w.text === sessionWord.text);
         if (wordIndex !== -1) {
-            allWords[wordIndex].sessionMisses = 0;
+            allWordsForUpdate[wordIndex].sessionMisses = 0;
         }
     });
-    saveWords(allWords);
+    saveWords(allWordsForUpdate);
     
     return currentSession;
 }
@@ -263,6 +454,9 @@ function completeSession() {
     stats.totalWordsMissed += currentSession.missedCount;
     stats.totalPoints += currentSession.points;
     saveStats(stats);
+    
+    // Check if any new chapters should be unlocked
+    checkAndUnlockNextChapter();
 }
 
 // ============================================
@@ -662,6 +856,7 @@ document.getElementById('finish-session-btn').addEventListener('click', () => {
 function showDashboardScreen() {
     showScreen('dashboard');
     updateDashboardStats();
+    updateChaptersDisplay();
     updateChallengeDeckDisplay();
     updateAllWordsDisplay();
 }
@@ -676,6 +871,118 @@ function updateDashboardStats() {
     document.getElementById('total-mastered').textContent = masteredCount;
     document.getElementById('total-sessions').textContent = stats.totalSessions;
     document.getElementById('challenge-deck-count').textContent = challengeDeck.length;
+}
+
+function updateChaptersDisplay() {
+    const container = document.getElementById('chapters-list');
+    if (!container) return;
+    
+    const chapterStates = getChapterStates();
+    
+    container.innerHTML = '';
+    
+    CHAPTERS.forEach(chapter => {
+        const state = chapterStates.find(c => c.id === chapter.id);
+        const isUnlocked = state ? state.unlocked : false;
+        const progress = getChapterProgress(chapter.id);
+        
+        const chapterCard = document.createElement('div');
+        chapterCard.className = `chapter-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+        
+        const header = document.createElement('div');
+        header.className = 'chapter-header';
+        
+        const title = document.createElement('div');
+        title.className = 'chapter-title';
+        
+        const lockIcon = document.createElement('span');
+        lockIcon.className = 'chapter-lock-icon';
+        lockIcon.textContent = isUnlocked ? '🔓' : '🔒';
+        
+        const name = document.createElement('span');
+        name.textContent = `Chapter ${chapter.id}: ${chapter.name}`;
+        
+        title.appendChild(lockIcon);
+        title.appendChild(name);
+        
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'btn btn-secondary chapter-toggle-btn';
+        toggleBtn.textContent = isUnlocked ? 'Lock' : 'Unlock';
+        toggleBtn.addEventListener('click', () => {
+            toggleChapterLock(chapter.id);
+            updateChaptersDisplay();
+            updateDashboardStats();
+        });
+        
+        header.appendChild(title);
+        header.appendChild(toggleBtn);
+        
+        const description = document.createElement('div');
+        description.className = 'chapter-description';
+        description.textContent = chapter.description;
+        
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'chapter-progress';
+        
+        const progressText = document.createElement('div');
+        progressText.className = 'chapter-progress-text';
+        progressText.textContent = `Progress: ${progress.mastered}/${progress.total} mastered`;
+        
+        const progressBar = document.createElement('div');
+        progressBar.className = 'chapter-progress-bar';
+        
+        const progressFill = document.createElement('div');
+        progressFill.className = 'chapter-progress-fill';
+        const progressPercent = progress.total > 0 ? (progress.mastered / progress.total) * 100 : 0;
+        progressFill.style.width = `${progressPercent}%`;
+        
+        progressBar.appendChild(progressFill);
+        progressContainer.appendChild(progressText);
+        progressContainer.appendChild(progressBar);
+        
+        const stats = document.createElement('div');
+        stats.className = 'chapter-stats';
+        stats.innerHTML = `
+            <span class="stat-badge stat-new">New: ${progress.new}</span>
+            <span class="stat-badge stat-learning">Learning: ${progress.learning}</span>
+            <span class="stat-badge stat-mastered">Mastered: ${progress.mastered}</span>
+        `;
+        
+        // Add recommendation if needed
+        if (isUnlocked && progress.total > 0) {
+            const recommendation = getChapterRecommendation(chapter.id, progress);
+            if (recommendation) {
+                const recDiv = document.createElement('div');
+                recDiv.className = 'chapter-recommendation';
+                recDiv.textContent = `💡 ${recommendation}`;
+                chapterCard.appendChild(recDiv);
+            }
+        }
+        
+        chapterCard.appendChild(header);
+        chapterCard.appendChild(description);
+        chapterCard.appendChild(progressContainer);
+        chapterCard.appendChild(stats);
+        
+        container.appendChild(chapterCard);
+    });
+}
+
+function getChapterRecommendation(chapterId, progress) {
+    const masteredPercent = progress.total > 0 ? (progress.mastered / progress.total) * 100 : 0;
+    
+    if (masteredPercent >= 80) {
+        return "Great progress! Keep practicing to master all words.";
+    } else if (masteredPercent >= 50) {
+        return "You're doing well! Practice the remaining words to unlock the next chapter.";
+    } else if (masteredPercent >= 20) {
+        return "Keep going! Regular practice will help you progress faster.";
+    } else if (progress.learning > 0) {
+        return "Just getting started! Try practicing these words daily.";
+    } else if (chapterId > 1 && masteredPercent < 20) {
+        return "Having trouble? Consider reviewing previous chapters.";
+    }
+    return null;
 }
 
 function updateChallengeDeckDisplay() {
@@ -732,7 +1039,19 @@ function createWordListItem(word, isChallenge) {
     const stats = document.createElement('div');
     stats.style.fontSize = '12px';
     stats.style.color = '#999';
-    stats.textContent = `Correct: ${word.correctCount} | Missed: ${word.missedCount}`;
+    
+    // Find chapter name if word has a chapter
+    let chapterInfo = '';
+    if (word.chapterId) {
+        const chapter = CHAPTERS.find(c => c.id === word.chapterId);
+        if (chapter) {
+            chapterInfo = ` | Chapter ${chapter.id}: ${chapter.name}`;
+        }
+    } else {
+        chapterInfo = ' | Custom Word';
+    }
+    
+    stats.textContent = `Correct: ${word.correctCount} | Missed: ${word.missedCount}${chapterInfo}`;
     
     info.appendChild(text);
     info.appendChild(status);
