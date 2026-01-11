@@ -268,6 +268,180 @@ function speakWord(word) {
 }
 
 // ============================================
+// Speech Recognition (Non-AI Validation)
+// ============================================
+
+let recognition = null;
+let isListening = false;
+
+// Initialize speech recognition if available
+function initializeSpeechRecognition() {
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        console.log('Speech Recognition not supported in this browser');
+        return false;
+    }
+    
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 5;
+    recognition.lang = 'en-US';
+    
+    return true;
+}
+
+// Calculate Levenshtein distance for fuzzy matching
+function levenshteinDistance(str1, str2) {
+    const len1 = str1.length;
+    const len2 = str2.length;
+    const matrix = [];
+    
+    // Initialize matrix
+    for (let i = 0; i <= len1; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= len2; j++) {
+        matrix[0][j] = j;
+    }
+    
+    // Calculate distances
+    for (let i = 1; i <= len1; i++) {
+        for (let j = 1; j <= len2; j++) {
+            if (str1[i - 1] === str2[j - 1]) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1, // substitution
+                    matrix[i][j - 1] + 1,     // insertion
+                    matrix[i - 1][j] + 1      // deletion
+                );
+            }
+        }
+    }
+    
+    return matrix[len1][len2];
+}
+
+// Compare spoken word to target word
+function compareWords(spoken, target) {
+    // Normalize both words
+    spoken = spoken.toLowerCase().trim();
+    target = target.toLowerCase().trim();
+    
+    // Exact match
+    if (spoken === target) {
+        return { match: true, confidence: 1.0 };
+    }
+    
+    // Calculate similarity using Levenshtein distance
+    const distance = levenshteinDistance(spoken, target);
+    const maxLength = Math.max(spoken.length, target.length);
+    const similarity = 1 - (distance / maxLength);
+    
+    // Accept if similarity is high enough (80% threshold for children)
+    // This allows for minor pronunciation differences
+    const match = similarity >= 0.8;
+    
+    return { match, confidence: similarity };
+}
+
+// Start listening for speech
+function startSpeechRecognition() {
+    if (!recognition || isListening) return;
+    
+    const speakBtn = document.getElementById('speak-word-btn');
+    const targetWord = currentSession.words[currentSession.currentIndex].text;
+    
+    isListening = true;
+    speakBtn.classList.add('listening');
+    speakBtn.textContent = '🎤 Listening...';
+    
+    // Clear countdown when user starts speaking
+    clearCountdown();
+    
+    recognition.onresult = (event) => {
+        const results = event.results[0];
+        let bestMatch = null;
+        let bestConfidence = 0;
+        
+        // Check all alternatives for best match
+        for (let i = 0; i < results.length; i++) {
+            const transcript = results[i].transcript;
+            const words = transcript.toLowerCase().split(/\s+/);
+            
+            // Check each word in the transcript
+            for (const word of words) {
+                const comparison = compareWords(word, targetWord);
+                if (comparison.match && comparison.confidence > bestConfidence) {
+                    bestMatch = word;
+                    bestConfidence = comparison.confidence;
+                }
+            }
+        }
+        
+        stopSpeechRecognition();
+        
+        if (bestMatch) {
+            // Success! They said the word correctly
+            handleWordResponse(true);
+            showFeedback(true);
+            showToast(`Great job! You said "${bestMatch}"`, 'success');
+            setTimeout(proceedToNextWord, 1500);
+        } else {
+            // Didn't match - encourage them to try again
+            const transcript = results[0].transcript;
+            showToast(`I heard "${transcript}". Try saying "${targetWord}"`, 'info');
+        }
+    };
+    
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        stopSpeechRecognition();
+        
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+            showToast('Microphone access denied. Please enable it in browser settings.', 'error');
+        } else if (event.error === 'no-speech') {
+            showToast('No speech detected. Try again!', 'info');
+        } else {
+            showToast('Speech recognition error. Use the buttons below instead.', 'error');
+        }
+    };
+    
+    recognition.onend = () => {
+        stopSpeechRecognition();
+    };
+    
+    try {
+        recognition.start();
+    } catch (error) {
+        console.error('Failed to start recognition:', error);
+        stopSpeechRecognition();
+        showToast('Could not start speech recognition. Use the buttons below.', 'error');
+    }
+}
+
+// Stop listening
+function stopSpeechRecognition() {
+    if (!recognition) return;
+    
+    isListening = false;
+    const speakBtn = document.getElementById('speak-word-btn');
+    if (speakBtn) {
+        speakBtn.classList.remove('listening');
+        speakBtn.textContent = '🎤 Say the word';
+    }
+    
+    try {
+        recognition.stop();
+    } catch (error) {
+        // Ignore errors when stopping
+    }
+}
+
+// ============================================
 // UI Management
 // ============================================
 
@@ -304,9 +478,52 @@ document.getElementById('parent-dashboard-btn').addEventListener('click', () => 
 // Learning Screen
 // ============================================
 
+let countdownInterval = null;
+
 function showLearningScreen() {
     showScreen('learning');
+    
+    // Check if speech recognition is available and show/hide button accordingly
+    const speakBtn = document.getElementById('speak-word-btn');
+    const speechAvailable = initializeSpeechRecognition();
+    
+    if (speechAvailable) {
+        speakBtn.style.display = 'block';
+    } else {
+        speakBtn.style.display = 'none';
+    }
+    
     displayCurrentWord();
+}
+
+function startCountdown(seconds, callback) {
+    const timerElement = document.getElementById('countdown-timer');
+    timerElement.classList.remove('hidden');
+    let remaining = seconds;
+    
+    timerElement.textContent = remaining;
+    
+    countdownInterval = setInterval(() => {
+        remaining--;
+        if (remaining > 0) {
+            timerElement.textContent = remaining;
+        } else {
+            clearInterval(countdownInterval);
+            timerElement.classList.add('hidden');
+            if (callback) callback();
+        }
+    }, 1000);
+}
+
+function clearCountdown() {
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+    const timerElement = document.getElementById('countdown-timer');
+    if (timerElement) {
+        timerElement.classList.add('hidden');
+    }
 }
 
 function displayCurrentWord() {
@@ -316,6 +533,9 @@ function displayCurrentWord() {
         showSummaryScreen();
         return;
     }
+    
+    // Clear any existing countdown
+    clearCountdown();
     
     const word = words[currentIndex];
     const wordDisplay = document.getElementById('word-display');
@@ -332,38 +552,13 @@ function displayCurrentWord() {
     const progressPercent = ((currentIndex) / words.length) * 100;
     document.getElementById('progress-fill').style.width = `${progressPercent}%`;
     
-    // Auto-speak word after 5 seconds
-    setTimeout(() => {
+    // Start countdown timer and auto-speak word after 5 seconds
+    startCountdown(5, () => {
         if (currentSession.currentIndex === currentIndex) {
             speakWord(word.text);
         }
-    }, 5000);
+    });
 }
-
-document.getElementById('got-it-btn').addEventListener('click', () => {
-    handleWordResponse(true);
-    showFeedback(true);
-    setTimeout(() => {
-        currentSession.currentIndex++;
-        displayCurrentWord();
-    }, 1500);
-});
-
-document.getElementById('need-help-btn').addEventListener('click', () => {
-    const word = currentSession.words[currentSession.currentIndex];
-    speakWord(word.text);
-    handleWordResponse(false);
-    showFeedback(false);
-    setTimeout(() => {
-        currentSession.currentIndex++;
-        displayCurrentWord();
-    }, 1500);
-});
-
-document.getElementById('hear-word-btn').addEventListener('click', () => {
-    const word = currentSession.words[currentSession.currentIndex];
-    speakWord(word.text);
-});
 
 function showFeedback(correct) {
     const feedbackIcon = document.getElementById('feedback-icon');
@@ -375,6 +570,36 @@ function showFeedback(correct) {
         feedbackIcon.style.color = '#FF9800';
     }
 }
+
+function proceedToNextWord() {
+    currentSession.currentIndex++;
+    displayCurrentWord();
+}
+
+document.getElementById('got-it-btn').addEventListener('click', () => {
+    clearCountdown();
+    handleWordResponse(true);
+    showFeedback(true);
+    setTimeout(proceedToNextWord, 1500);
+});
+
+document.getElementById('need-help-btn').addEventListener('click', () => {
+    clearCountdown();
+    const word = currentSession.words[currentSession.currentIndex];
+    speakWord(word.text);
+    handleWordResponse(false);
+    showFeedback(false);
+    setTimeout(proceedToNextWord, 1500);
+});
+
+document.getElementById('hear-word-btn').addEventListener('click', () => {
+    const word = currentSession.words[currentSession.currentIndex];
+    speakWord(word.text);
+});
+
+document.getElementById('speak-word-btn').addEventListener('click', () => {
+    startSpeechRecognition();
+});
 
 // ============================================
 // Summary Screen
@@ -520,8 +745,8 @@ document.getElementById('back-to-home-btn').addEventListener('click', () => {
     showScreen('welcome');
 });
 
-// Add new word
-document.getElementById('add-word-btn').addEventListener('click', () => {
+// Add new word function
+function addNewWord() {
     const input = document.getElementById('new-word-input');
     const wordText = input.value.trim().toLowerCase();
     
@@ -553,6 +778,16 @@ document.getElementById('add-word-btn').addEventListener('click', () => {
     updateAllWordsDisplay();
     
     showToast(`Word "${wordText}" added successfully!`, 'success');
+}
+
+// Add new word - button click
+document.getElementById('add-word-btn').addEventListener('click', addNewWord);
+
+// Add new word - Enter key
+document.getElementById('new-word-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addNewWord();
+    }
 });
 
 // Word filter buttons
