@@ -13,12 +13,17 @@ A Progressive Web App (PWA) to help children learn sight words through gamified 
 - **Instant feedback** - Visual checkmarks and animations
 - **Gamification** - Points, streaks, and encouraging end-of-session summaries
 - **Progressive learning** - Words automatically move from new → learning → mastered
+- **Chapter-based progression** - Learn words in logical groups that build upon each other
 
 ### For Parents 👪
-- **Progress tracking** - See total words mastered and sessions completed
+- **Chapter Organization** - 190+ sight words organized into 19 progressive learning chapters
+- **Chapter Progress Tracking** - See mastery progress for each chapter (e.g., 8/10 words mastered)
+- **Smart Chapter Unlocking** - Chapters automatically unlock when 80% of previous chapter is mastered
+- **Manual Chapter Control** - Lock or unlock chapters as needed for your child's pace
+- **Chapter Recommendations** - Get guidance on when to review or advance
 - **Challenge Deck** - Automatically identifies words that need more practice
 - **Word management** - Add custom words (names, school lists, etc.) with Enter key
-- **Word filtering** - View words by status (new, learning, mastered)
+- **Word filtering** - View words by status (new, learning, mastered) and chapter
 - **Enable/disable words** - Customize which words appear in sessions
 
 ### Technical Features 🛠️
@@ -88,32 +93,54 @@ vercel
 - Helps children focus on words they're struggling with
 - Parents can see which words need attention in the dashboard
 
+### Chapter System
+- **190+ sight words** organized into 19 progressive chapters (~10 words each)
+- **Chapter 1 unlocked by default** - "Starting Out" with the most common words
+- **Automatic unlocking** - New chapters unlock when 80% of the previous chapter is mastered
+- **Manual control** - Parents can manually lock/unlock chapters as needed
+- **Filtered practice** - Sessions only include words from unlocked chapters
+- **Progress tracking** - View mastery progress for each chapter
+- **Recommendations** - Get chapter-specific guidance to help your child progress
+
+#### Chapter List
+1. **Starting Out** - The most common and essential sight words
+2. **Simple Actions** - Basic action words we use every day
+3. **More Basics** - Building on what you know
+4. **Common Verbs** - Action words for everyday activities
+5. **Question Words** - Words that help us ask questions
+6. **Direction & Place** - Words about where things are
+7. **More Actions** - Learning more things we can do
+8. **People & Things** - Words about us and our world
+9. **Describing Words** - Words that tell us about size and quality
+10. **Numbers** - Counting words from one to ten
+11. **Connecting Ideas** - Words that join thoughts together
+12. **More Describing** - Even more ways to describe things
+13. **Around & About** - More directional and location words
+14. **Belonging** - Words about possession and ownership
+15. **Helping Verbs** - Words that help other verbs
+16. **Being & Doing** - More forms of verbs
+17. **Advanced Connectors** - Complex connecting words
+18. **Time & Frequency** - Words about when things happen
+19. **Ways & Means** - Words about how we do things
+
 ### Word States
 - **New**: Word hasn't been practiced yet
 - **Learning**: Word is being practiced (1-4 correct answers)
 - **Mastered**: Word has been answered correctly 5+ times
 
-## Default Word List
+## Word List
 
-The app includes 170+ high-frequency sight words compiled from trusted sources (Dolch, Fry, and Oxford word lists), organized by category:
+The app includes 190+ high-frequency sight words compiled from trusted sources (Dolch, Fry, and Oxford word lists), organized into 19 progressive chapters:
 
-**Most Common Words:** the, and, a, to, said, in, he, I, of, it, was, you, they, on, she, is, for, at, his, but, that, with, all, we, can, are, up, had, my, her
+**Chapter 1 - Starting Out:** the, and, a, to, in, I, is, it, you, of
 
-**Common Verbs & Actions:** see, look, go, come, get, make, do, run, jump, play, help, walk, stop, find, put, take, give, think, say, know
+**Chapter 2 - Simple Actions:** go, see, can, we, my, he, she, me, up, at
 
-**Question Words & Connectors:** who, what, where, when, why, how, which, an, as, be, by, or, if, so, no, yes, not, then, than, now
+**Chapter 3 - More Basics:** was, on, they, but, had, all, are, for, his, her
 
-**Prepositions & Directional Words:** from, into, over, under, out, down, around, off, up, about, there, here, away, back, again, soon, right, left, before, after
+You can add unlimited custom words through the Parent Dashboard, and they will be available for practice alongside the default words.
 
-**Pronouns & Possessives:** him, them, this, these, those, some, any, many, our, your, their, us, me
-
-**Size & Quantity Descriptors:** big, little, small, long, short, old, new, good, bad, very, much, more, most, few, lots, only, just, other, every, each
-
-**Numbers:** one through ten
-
-**Modals & Auxiliaries:** has, have, does, did, will, would, could, should, may, must, been, being
-
-**And many more...**
+## Previous Organization
 
 You can add unlimited custom words through the Parent Dashboard.
 
