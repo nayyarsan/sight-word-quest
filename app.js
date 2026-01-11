@@ -155,6 +155,16 @@ const STORAGE_KEYS = {
     STREAK: 'dailyStreak'
 };
 
+// Streak constants
+const INITIAL_STREAK_DATA = {
+    currentStreak: 0,
+    longestStreak: 0,
+    lastSessionDate: null
+};
+
+const STREAK_BONUS_BASE = 5; // Base bonus points for day 1
+const STREAK_BONUS_INCREMENT = 2; // Additional points per day
+
 // Initialize app data structure
 function initializeAppData() {
     // Initialize words if not exists
@@ -197,12 +207,7 @@ function initializeAppData() {
 
     // Initialize streak data if not exists
     if (!localStorage.getItem(STORAGE_KEYS.STREAK)) {
-        const initialStreak = {
-            currentStreak: 0,
-            longestStreak: 0,
-            lastSessionDate: null
-        };
-        localStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(initialStreak));
+        localStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(INITIAL_STREAK_DATA));
     }
 
     // Initialize challenge deck if not exists
@@ -267,7 +272,7 @@ function saveChapterStates(states) {
 // Get streak data
 function getStreakData() {
     const streak = localStorage.getItem(STORAGE_KEYS.STREAK);
-    return streak ? JSON.parse(streak) : { currentStreak: 0, longestStreak: 0, lastSessionDate: null };
+    return streak ? JSON.parse(streak) : INITIAL_STREAK_DATA;
 }
 
 // Save streak data
@@ -326,9 +331,9 @@ function updateStreak() {
 // Calculate bonus points based on streak
 function calculateStreakBonus(streak) {
     if (streak <= 0) return 0;
-    // Bonus increases with streak: 5 points for day 1, +2 for each additional day
-    // Formula: 5 + (streak - 1) * 2
-    return 5 + (streak - 1) * 2;
+    // Bonus increases with streak: base points for day 1, additional points per day
+    // Formula: STREAK_BONUS_BASE + (streak - 1) * STREAK_BONUS_INCREMENT
+    return STREAK_BONUS_BASE + (streak - 1) * STREAK_BONUS_INCREMENT;
 }
 
 
@@ -560,12 +565,12 @@ function celebrateStreakMilestone(streak, isNewDay) {
     } else if (streak === 5) {
         showToast('🔥 Amazing! 5-day streak! Keep it up!', 'success');
     } else if (streak === 10) {
-        showToast('⭐ Incredible! 10-day streak! You\'re on fire!', 'success');
+        showToast('⭐ Incredible! 10-day streak! You are on fire!', 'success');
     } else if (streak === 30) {
-        showToast('🏆 Legendary! 30-day streak! You\'re a champion!', 'success');
+        showToast('🏆 Legendary! 30-day streak! You are a champion!', 'success');
     } else if (streak > 10 && streak % 7 === 0) {
         // Celebrate every week after reaching 10+ days
-        showToast(`🌟 ${streak}-day streak! You\'re doing great!`, 'success');
+        showToast(`🌟 ${streak}-day streak! You are doing great!`, 'success');
     }
     // Removed the else clause to avoid showing toast for every single day
 }
