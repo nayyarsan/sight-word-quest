@@ -16,7 +16,7 @@ A Progressive Web App (PWA) to help children learn sight words through gamified 
 - **Chapter-based progression** - Learn words in logical groups that build upon each other
 
 ### For Parents 👪
-- **Chapter Organization** - 190+ sight words organized into 19 progressive learning chapters
+- **Chapter Organization** - 170+ sight words organized into 19 progressive learning chapters
 - **Chapter Progress Tracking** - See mastery progress for each chapter (e.g., 8/10 words mastered)
 - **Smart Chapter Unlocking** - Chapters automatically unlock when 80% of previous chapter is mastered
 - **Manual Chapter Control** - Lock or unlock chapters as needed for your child's pace
@@ -94,7 +94,7 @@ vercel
 - Parents can see which words need attention in the dashboard
 
 ### Chapter System
-- **190+ sight words** organized into 19 progressive chapters (~10 words each)
+- **170+ sight words** organized into 19 progressive chapters
 - **Chapter 1 unlocked by default** - "Starting Out" with the most common words
 - **Automatic unlocking** - New chapters unlock when 80% of the previous chapter is mastered
 - **Manual control** - Parents can manually lock/unlock chapters as needed
@@ -130,7 +130,7 @@ vercel
 
 ## Word List
 
-The app includes 190+ high-frequency sight words compiled from trusted sources (Dolch, Fry, and Oxford word lists), organized into 19 progressive chapters:
+The app includes 170+ high-frequency sight words compiled from trusted sources (Dolch, Fry, and Oxford word lists), organized into 19 progressive chapters:
 
 **Chapter 1 - Starting Out:** the, and, a, to, in, I, is, it, you, of
 

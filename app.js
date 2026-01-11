@@ -947,6 +947,10 @@ function updateChaptersDisplay() {
             <span class="stat-badge stat-learning">Learning: ${progress.learning}</span>
             <span class="stat-badge stat-mastered">Mastered: ${progress.mastered}</span>
         `;
+        chapterCard.appendChild(header);
+        chapterCard.appendChild(description);
+        chapterCard.appendChild(progressContainer);
+        chapterCard.appendChild(stats);
         
         // Add recommendation if needed
         if (isUnlocked && progress.total > 0) {
@@ -958,11 +962,6 @@ function updateChaptersDisplay() {
                 chapterCard.appendChild(recDiv);
             }
         }
-        
-        chapterCard.appendChild(header);
-        chapterCard.appendChild(description);
-        chapterCard.appendChild(progressContainer);
-        chapterCard.appendChild(stats);
         
         container.appendChild(chapterCard);
     });
