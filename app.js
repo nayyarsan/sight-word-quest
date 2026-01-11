@@ -389,10 +389,7 @@ function startSpeechRecognition() {
             handleWordResponse(true);
             showFeedback(true);
             showToast(`Great job! You said "${bestMatch}"`, 'success');
-            setTimeout(() => {
-                currentSession.currentIndex++;
-                displayCurrentWord();
-            }, 1500);
+            setTimeout(proceedToNextWord, 1500);
         } else {
             // Didn't match - encourage them to try again
             const transcript = results[0].transcript;
@@ -563,37 +560,6 @@ function displayCurrentWord() {
     });
 }
 
-document.getElementById('got-it-btn').addEventListener('click', () => {
-    clearCountdown();
-    handleWordResponse(true);
-    showFeedback(true);
-    setTimeout(() => {
-        currentSession.currentIndex++;
-        displayCurrentWord();
-    }, 1500);
-});
-
-document.getElementById('need-help-btn').addEventListener('click', () => {
-    clearCountdown();
-    const word = currentSession.words[currentSession.currentIndex];
-    speakWord(word.text);
-    handleWordResponse(false);
-    showFeedback(false);
-    setTimeout(() => {
-        currentSession.currentIndex++;
-        displayCurrentWord();
-    }, 1500);
-});
-
-document.getElementById('hear-word-btn').addEventListener('click', () => {
-    const word = currentSession.words[currentSession.currentIndex];
-    speakWord(word.text);
-});
-
-document.getElementById('speak-word-btn').addEventListener('click', () => {
-    startSpeechRecognition();
-});
-
 function showFeedback(correct) {
     const feedbackIcon = document.getElementById('feedback-icon');
     if (correct) {
@@ -604,6 +570,36 @@ function showFeedback(correct) {
         feedbackIcon.style.color = '#FF9800';
     }
 }
+
+function proceedToNextWord() {
+    currentSession.currentIndex++;
+    displayCurrentWord();
+}
+
+document.getElementById('got-it-btn').addEventListener('click', () => {
+    clearCountdown();
+    handleWordResponse(true);
+    showFeedback(true);
+    setTimeout(proceedToNextWord, 1500);
+});
+
+document.getElementById('need-help-btn').addEventListener('click', () => {
+    clearCountdown();
+    const word = currentSession.words[currentSession.currentIndex];
+    speakWord(word.text);
+    handleWordResponse(false);
+    showFeedback(false);
+    setTimeout(proceedToNextWord, 1500);
+});
+
+document.getElementById('hear-word-btn').addEventListener('click', () => {
+    const word = currentSession.words[currentSession.currentIndex];
+    speakWord(word.text);
+});
+
+document.getElementById('speak-word-btn').addEventListener('click', () => {
+    startSpeechRecognition();
+});
 
 // ============================================
 // Summary Screen

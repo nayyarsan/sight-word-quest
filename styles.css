@@ -91,6 +91,7 @@ body {
 
 .btn-accent.listening {
     animation: pulse 1s ease-in-out infinite;
+    will-change: transform;
 }
 
 @keyframes pulse {
