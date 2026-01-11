@@ -12,6 +12,8 @@ A Progressive Web App (PWA) to help children learn sight words through gamified 
 - **Simple controls** - "I got it right" and "I need help" buttons
 - **Instant feedback** - Visual checkmarks and animations
 - **Gamification** - Points, streaks, and encouraging end-of-session summaries
+- **Daily Streak System** - Build streaks by practicing every day, with bonus points that increase with longer streaks
+- **Streak Milestones** - Special celebrations at 5, 10, and 30 day streaks
 - **Progressive learning** - Words automatically move from new → learning → mastered
 - **Chapter-based progression** - Learn words in logical groups that build upon each other
 
@@ -21,6 +23,7 @@ A Progressive Web App (PWA) to help children learn sight words through gamified 
 - **Smart Chapter Unlocking** - Chapters automatically unlock when 80% of previous chapter is mastered
 - **Manual Chapter Control** - Lock or unlock chapters as needed for your child's pace
 - **Chapter Recommendations** - Get guidance on when to review or advance
+- **Daily Streak Tracking** - Monitor current streak and longest streak achieved
 - **Challenge Deck** - Automatically identifies words that need more practice
 - **Word management** - Add custom words (names, school lists, etc.) with Enter key
 - **Word filtering** - View words by status (new, learning, mastered) and chapter
@@ -92,6 +95,15 @@ vercel
 - Next session prioritizes Challenge Deck words (up to 5)
 - Helps children focus on words they're struggling with
 - Parents can see which words need attention in the dashboard
+
+### Daily Streak & Bonus Points
+- **Building Streaks** - Practice on consecutive days to build your daily streak
+- **Streak Display** - Current streak shown prominently during learning and in dashboard
+- **Bonus Points** - Earn extra points for maintaining streaks (5 points on day 1, increasing by 2 for each additional day)
+- **Milestone Celebrations** - Special animations and messages at 5, 10, and 30 day milestones
+- **Automatic Tracking** - Streak updates automatically each day you practice
+- **Persistence** - Streak survives app restarts and tab reloads (stored in localStorage)
+- **Reset Logic** - If you skip a day, streak resets to 1 on the next practice session
 
 ### Chapter System
 - **170+ sight words** organized into 19 progressive chapters
@@ -166,7 +178,9 @@ Tested on:
 All data is stored locally in your browser using `localStorage`:
 - Word lists and states
 - Progress statistics
+- Daily streak data (current streak, longest streak, last session date)
 - Challenge Deck
+- Chapter states
 - Session history
 
 **Note**: Clearing browser data will reset all progress.
