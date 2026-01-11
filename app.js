@@ -297,9 +297,9 @@ function updateStreak() {
     const streakData = getStreakData();
     const lastDate = streakData.lastSessionDate;
     
-    // If already practiced today, return current streak (no update)
+    // If already practiced today, return current streak (no update) with isNewDay flag
     if (isToday(lastDate)) {
-        return streakData;
+        return { ...streakData, isNewDay: false };
     }
     
     // If practiced yesterday, increment streak
@@ -318,9 +318,9 @@ function updateStreak() {
     // Update last session date to today
     streakData.lastSessionDate = new Date().toISOString();
     
-    // Save and return updated streak data
+    // Save and return updated streak data with isNewDay flag
     saveStreakData(streakData);
-    return streakData;
+    return { ...streakData, isNewDay: true };
 }
 
 // Calculate bonus points based on streak
@@ -475,8 +475,8 @@ function createSession() {
         streakBonus: streakBonus
     };
     
-    // Show streak milestone celebration if applicable
-    celebrateStreakMilestone(streakData.currentStreak);
+    // Show streak milestone celebration only if this is a new day
+    celebrateStreakMilestone(streakData.currentStreak, streakData.isNewDay);
     
     // Reset session misses only for words in this session
     const allWordsForUpdate = getWords();
@@ -551,7 +551,10 @@ function completeSession() {
 }
 
 // Celebrate streak milestones
-function celebrateStreakMilestone(streak) {
+function celebrateStreakMilestone(streak, isNewDay) {
+    // Only show celebrations if this is a new day (streak was actually updated)
+    if (!isNewDay) return;
+    
     if (streak === 1) {
         showToast('🎉 Welcome back! Your streak starts today!', 'success');
     } else if (streak === 5) {
@@ -560,12 +563,11 @@ function celebrateStreakMilestone(streak) {
         showToast('⭐ Incredible! 10-day streak! You\'re on fire!', 'success');
     } else if (streak === 30) {
         showToast('🏆 Legendary! 30-day streak! You\'re a champion!', 'success');
-    } else if (streak > 1 && streak % 7 === 0) {
-        // Celebrate every week after first milestone
+    } else if (streak > 10 && streak % 7 === 0) {
+        // Celebrate every week after reaching 10+ days
         showToast(`🌟 ${streak}-day streak! You\'re doing great!`, 'success');
-    } else if (streak > 1) {
-        showToast(`🔥 ${streak}-day streak! Keep practicing!`, 'success');
     }
+    // Removed the else clause to avoid showing toast for every single day
 }
 
 // ============================================
